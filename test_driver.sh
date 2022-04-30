@@ -33,12 +33,12 @@ python3 CalculatePalindromeLength.py -tc 26 -th -1
 echo ""
 echo ""
 
-echo "Nominal Test 6: Set max runs"
+echo "Nominal Test 6: Set maxRuns"
 python3 CalculatePalindromeLength.py -tc 26 -mc 10
 echo ""
 echo ""
 
-echo "Nominal Test 7: Override max runs"
+echo "Nominal Test 7: Override maxRuns"
 python3 CalculatePalindromeLength.py -tc 26 -th -1
 echo ""
 echo ""
@@ -119,35 +119,35 @@ echo ""
 
 
 
-echo "===== MaxCount error tests ====="
+echo "===== MaxRuns error tests ====="
 echo ""
 
-echo "Error Test: MaxCount zero"
+echo "Error Test: MaxRuns zero"
 python3 CalculatePalindromeLength.py -tc 26 -mc 0
 echo ""
 echo ""
 
-echo "Error Test: MaxCount -1"
+echo "Error Test: MaxRuns -1"
 python3 CalculatePalindromeLength.py -tc 26 -mc -1
 echo ""
 echo ""
 
-echo "Error Test: MaxCount -5"
+echo "Error Test: MaxRuns -5"
 python3 CalculatePalindromeLength.py -tc 26 -mc -5
 echo ""
 echo ""
 
-echo "Error Test: MaxCount character"
+echo "Error Test: MaxRuns character"
 python3 CalculatePalindromeLength.py -tc 26 -mc d
 echo ""
 echo ""
 
-echo "Error Test: MaxCount string"
+echo "Error Test: MaxRuns string"
 python3 CalculatePalindromeLength.py -tc 26 -mc foo
 echo ""
 echo ""
 
-echo "Error Test: MaxCount blank"
+echo "Error Test: MaxRuns blank"
 python3 CalculatePalindromeLength.py -tc 26 -mc
 echo ""
 echo ""
