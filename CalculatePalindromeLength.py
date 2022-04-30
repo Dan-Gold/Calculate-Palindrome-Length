@@ -22,19 +22,22 @@ OUTPUT:
 
 
 USAGE:
-    usage: CalculateProbabilityOfPalindrome.py [-h] -tc TOTALCHARS [-th THRESHOLD] [-mc MAXCOUNT] [-s]
+	usage: CalculatePalindromeLength.py [-h] -tc TOTALCHARS [-th THRESHOLD] [-mc MAXRUNS] [-s]
 
-    Used to calculate the maximum word length given a probability threshold and/or maximum number of calculation runs.
+	Used to calculate the maximum word length of a palindrome given the total number of characters in
+	the poola probability threshold and/or maximum number of calculation runs.
 
-    options:
-      -h, --help      show this help message and exit
-      -th THRESHOLD   Probability decimal. When the probability is less than or equal to this number stop calculating. Set to -1 to
-                      ignore this stop condition. (Default is 0.000001)
-      -mc MAXCOUNT    The maximum number of times calculate is allowed to run. (Default is 400)
-      -s              Shows the processing of the probabilities by printing to the terminal. (Default is False)
+	options:
+	  -h, --help      show this help message and exit
+	  -th THRESHOLD   Probability decimal. When the probability is less than or equal to this number
+		          stop calculating. Set to -1 to ignore this stop condition. (Default is 0.000001)
+	  -mc MAXRUNS     The maximum number of times calculate is allowed to run. (Default is 400)
+	  -s              Shows the processing of the probabilities by printing to the terminal. (Default
+		          is False)
 
-    required arguments:
-      -tc TOTALCHARS  Total number of characters in the character set that will be used to make palindromes.
+	required arguments:
+	  -tc TOTALCHARS  Total number of characters in the character set that will be used to make
+		          palindromes.
 
 
 
@@ -80,7 +83,7 @@ def argParse():
 
     # Optional Arguments
     parser.add_argument('-th', dest="threshold", default=0.000001, help = "Probability decimal. When the probability is less than or equal to this number stop calculating. Set to -1 to ignore this stop condition. (Default is 0.000001)")
-    parser.add_argument('-mc', dest="maxCount", default=400, help = "The maximum number of times calculate is allowed to run. (Default is 400)")
+    parser.add_argument('-mc', dest="maxRuns", default=400, help = "The maximum number of times calculate is allowed to run. (Default is 400)")
     parser.add_argument('-s', dest="show", action='store_true', help = "Shows the processing of the probabilities by printing to the terminal. (Default is False)")
 
     args = parser.parse_args()
@@ -117,16 +120,6 @@ class calcProbPal():
         self.maxCalcRuns = maxCalcRuns
         self.show = show
 
-    def overrideMaxCalcRuns(self):
-        """ Overrides the self.maxCalcRuns so that only when the self.threshold is met will the program stop running calculations. """
-
-        self.maxCalcRuns = -1
-
-    def overrideThreshold(self):
-        """ Overrides the self.threshold so that only when the self.maxCalcRuns is met will the program stop running calculations. """
-
-        self.threshold = -1
-
     def runCalculations(self, totalChars):
         """ Runs the calculation until probability threshold is met or the maximum number of runs is met unless these variables are overridden. Returns the resulting word length that meets the desired input targets. """
 
@@ -141,7 +134,21 @@ class calcProbPal():
 
             wordLength += 1
 
-        return(wordLength)
+        # Check to see that the last wordLength += 1 probability is equal to the previous
+        # probability. Theoretically they should always be the same and to be more efficient
+        # we only need to loop through even numbers then add one to the wordLength when the
+        # threshold is reached. Which would reduce the number of times calculate is called by half.
+        # TODO: make runQuickCalculations() method with this efficiency
+        nextProb = self.calculate(totalChars, wordLength)
+
+        if(self.show):
+            print("Word Length: {0}   Probability: {1}".format(wordLength, curProb))
+
+        if(not nextProb == curProb):
+            # This code should theoretically never be reached
+            wordLength -= 1
+
+        return(wordLength, curProb)
 
     def calculate(self, totalChars, wordLength):
         """ Calculates the probability that the given wordLength and the total number of characters
@@ -176,7 +183,7 @@ class calcProbPal():
     def calcPalAll(self, totalChars, wordLength):
         """ Calculates the probability that the current wordLength is a palindrome. Returns the probability as a float.
 
-        TODO: Warning might have float error where 9 is at the end. Might need to round up to nearest three consecutive zeros.
+        Warning this has floating point error where 9 is at the end. Might need to round up to nearest three consecutive zeros.
         0.010000000000000009
         0.10000000000000009
 
@@ -195,8 +202,9 @@ if __name__ == "__main__":
 
     options = argParse()
 
-    app = calcProbPal(options.threshold, options.maxCount, options.show)
+    app = calcProbPal(options.threshold, options.maxRuns, options.show)
 
-    result = app.runCalculations(int(options.totalChars))
+    wordLen, prob = app.runCalculations(int(options.totalChars))
 
-    print("Word Length: {0} to meet threshold of {1}".format(result, options.threshold))
+    print("Word Length: {0} With final probability of {1} to meet threshold of {2}".format(wordLen, prob, options.threshold))
+    print("Program complete")
