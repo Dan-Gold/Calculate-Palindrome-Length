@@ -57,16 +57,6 @@ python3 CalculatePalindromeLength.py -tc 0
 echo ""
 echo ""
 
-echo "Error Test: TotalChars -1"
-python3 CalculatePalindromeLength.py -tc -1
-echo ""
-echo ""
-
-echo "Error Test: TotalChars -5"
-python3 CalculatePalindromeLength.py -tc -5
-echo ""
-echo ""
-
 echo "Error Test: TotalChars character"
 python3 CalculatePalindromeLength.py -tc a
 echo ""
