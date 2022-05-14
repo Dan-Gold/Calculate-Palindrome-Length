@@ -22,22 +22,23 @@ OUTPUT:
 
 
 USAGE:
-	usage: CalculatePalindromeLength.py [-h] -tc TOTALCHARS [-th THRESHOLD] [-mc MAXRUNS] [-s]
+    usage: CalculatePalindromeLength.py [-h] -tc TOTALCHARS [-th THRESHOLD] [-mc MAXRUNS] [-s]
 
-	Used to calculate the maximum word length of a palindrome given the total number of characters in
-	the poola probability threshold and/or maximum number of calculation runs.
+    Used to calculate the maximum word length of a palindrome given the total number of characters in
+    the pool with a probability threshold and/or maximum number of calculation runs.
 
-	options:
-	  -h, --help      show this help message and exit
-	  -th THRESHOLD   Probability decimal. When the probability is less than or equal to this number
-		          stop calculating. Set to -1 to ignore this stop condition. (Default is 0.000001)
-	  -mc MAXRUNS     The maximum number of times calculate is allowed to run. (Default is 400)
-	  -s              Shows the processing of the probabilities by printing to the terminal. (Default
-		          is False)
+    options:
+      -h, --help      show this help message and exit
+      -th THRESHOLD   Probability decimal. When the probability is less than or equal to this number
+                      stop calculating. Set to -1 to ignore this stop condition. (Default is 0.000001)
+      -mc MAXRUNS     The maximum number of times calculate is allowed to run. (Default is 400)
+      -s              Shows the processing of the probabilities by printing to the terminal. (Default
+                      is False)
 
-	required arguments:
-	  -tc TOTALCHARS  Total number of characters in the character set that will be used to make
-		          palindromes.
+    required arguments:
+      -tc TOTALCHARS  Total number of characters in the character set that will be used to make
+                      palindromes.
+
 
 
 
@@ -75,7 +76,7 @@ import errno
 def argParse():
     """ This is the argparse for calling this program as main """
 
-    parser = argparse.ArgumentParser(description = "Used to calculate the maximum word length of a palindrome given the total number of characters in the poola probability threshold and/or maximum number of calculation runs. ")
+    parser = argparse.ArgumentParser(description = "Used to calculate the maximum word length of a palindrome given the total number of characters in the pool with a probability threshold and/or maximum number of calculation runs. ")
 
     # Required Arguments
     required = parser.add_argument_group("required arguments")
@@ -83,7 +84,7 @@ def argParse():
 
     # Optional Arguments
     parser.add_argument('-th', dest="threshold", default=0.000001, help = "Probability decimal. When the probability is less than or equal to this number stop calculating. Set to -1 to ignore this stop condition. (Default is 0.000001)")
-    parser.add_argument('-mc', dest="maxRuns", default=400, help = "The maximum number of times calculate is allowed to run. (Default is 400)")
+    parser.add_argument('-mr', dest="maxRuns", default=400, help = "The maximum number of times calculate is allowed to run. (Default is 400)")
     parser.add_argument('-s', dest="show", action='store_true', help = "Shows the processing of the probabilities by printing to the terminal. (Default is False)")
 
     args = parser.parse_args()
@@ -111,17 +112,20 @@ class calcProbPal():
             pass
             # TODO: make these except statement better
 
-        # Threshold must be less than one
-        if(threshold > 1):
-            print("Entered threshold is greater than or equal to 1, setting to default: 0.000001")
+        # Threshold must be less than one and greater than zero, or equal to -1
+        if(not ((threshold < 1 and threshold > 0) or threshold == -1)):
+            print("Entered threshold was not a value exclusively between 0-1 or equal to -1, setting to default: 0.000001")
             threshold = 0.000001
 
         self.threshold = threshold
         self.maxCalcRuns = maxCalcRuns
         self.show = show
+        self.floatPrec = 20
 
     def runCalculations(self, totalChars):
         """ Runs the calculation until probability threshold is met or the maximum number of runs is met unless these variables are overridden. Returns the resulting word length that meets the desired input targets. """
+
+        # TODO: Check inputs to make sure they are all within valid ranges
 
         curProb = 99
         wordLength = 0
@@ -130,7 +134,7 @@ class calcProbPal():
             curProb = self.calculate(totalChars, wordLength)
 
             if(self.show):
-                print("Word Length: {0}   Probability: {1}".format(wordLength, curProb))
+                print("Word Length: {0}   Probability: {1:.{prec}f}".format(wordLength, curProb, prec=self.floatPrec))
 
             wordLength += 1
 
@@ -142,9 +146,9 @@ class calcProbPal():
         nextProb = self.calculate(totalChars, wordLength)
 
         if(self.show):
-            print("Word Length: {0}   Probability: {1}".format(wordLength, curProb))
+            print("Word Length: {0}   Probability: {1:.{prec}f}".format(wordLength, curProb, prec=self.floatPrec))
 
-        if(not nextProb == curProb):
+        if((not nextProb == curProb) and wordLength > 0):
             # This code should theoretically never be reached
             wordLength -= 1
 
@@ -169,14 +173,25 @@ class calcProbPal():
     def calcPalEven(self, totalChars, wordLength):
         """ Calculates the probability that the current EVEN wordLength is a palindrome. Returns the probability as a float. """
 
-        result = 1/(totalChars**(wordLength/2))
+        result = 0
+
+        try:
+            result = 1/(totalChars**(wordLength/2))
+        except ZeroDivisionError as e:
+            print("Error: {0} setting result to zero".format(e))
+            
 
         return(result)
 
     def calcPalOdd(self, totalChars, wordLength):
         """ Calculates the probability that the current ODD wordLength is a palindrome. Returns the probability as a float. """
 
-        result = 1/(totalChars**((wordLength-1)/2))
+        result = 0
+
+        try:
+            result = 1/(totalChars**((wordLength-1)/2))
+        except ZeroDivisionError as e:
+            print("Error: {0} setting result to zero".format(e))
 
         return(result)
 

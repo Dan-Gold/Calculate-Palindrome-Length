@@ -1,0 +1,165 @@
+Nominal Test 0: Help menu
+usage: CalculatePalindromeLength.py [-h] -tc TOTALCHARS [-th THRESHOLD] [-mr MAXRUNS] [-s]
+
+Used to calculate the maximum word length of a palindrome given the total number of characters in
+the pool with a probability threshold and/or maximum number of calculation runs.
+
+options:
+  -h, --help      show this help message and exit
+  -th THRESHOLD   Probability decimal. When the probability is less than or equal to this number
+                  stop calculating. Set to -1 to ignore this stop condition. (Default is 0.000001)
+  -mr MAXRUNS     The maximum number of times calculate is allowed to run. (Default is 400)
+  -s              Shows the processing of the probabilities by printing to the terminal. (Default
+                  is False)
+
+required arguments:
+  -tc TOTALCHARS  Total number of characters in the character set that will be used to make
+                  palindromes.
+
+
+Nominal Test 1: All english characters
+Word Length: 11 With final probability of 8.416533573215762e-08 to meet threshold of 1e-06
+Program complete
+
+
+Nominal Test 2: All english characters and show probabilities
+Word Length: 0   Probability: 1.00000000000000000000
+Word Length: 1   Probability: 1.00000000000000000000
+Word Length: 2   Probability: 0.03846153846153846367
+Word Length: 3   Probability: 0.03846153846153846367
+Word Length: 4   Probability: 0.00147928994082840233
+Word Length: 5   Probability: 0.00147928994082840233
+Word Length: 6   Probability: 0.00005689576695493855
+Word Length: 7   Probability: 0.00005689576695493855
+Word Length: 8   Probability: 0.00000218829872903610
+Word Length: 9   Probability: 0.00000218829872903610
+Word Length: 10   Probability: 0.00000008416533573216
+Word Length: 11   Probability: 0.00000008416533573216
+Word Length: 11 With final probability of 8.416533573215762e-08 to meet threshold of 1e-06
+Program complete
+
+
+Nominal Test 3: Pool of 10 characters
+Word Length: 11 With final probability of 8.416533573215762e-08 to meet threshold of 1e-06
+Program complete
+
+
+Nominal Test 4: Pool of 2 characters
+Word Length: 41 With final probability of 9.5367431640625e-07 to meet threshold of 1e-06
+Program complete
+
+
+Nominal Test 5: Override threshold
+Word Length: 399 With final probability of 2.63210829477001e-282 to meet threshold of -1
+Program complete
+
+
+Nominal Test 6: Set maxRuns
+Word Length: 9 With final probability of 2.1882987290360982e-06 to meet threshold of 1e-06
+Program complete
+
+
+Nominal Test 7: Override maxRuns
+Word Length: 399 With final probability of 2.63210829477001e-282 to meet threshold of -1
+Program complete
+
+
+===== TotalChars error tests =====
+
+Error Test: TotalChars zero
+Error: float division by zero setting result to zero
+Error: float division by zero setting result to zero
+Word Length: 3 With final probability of 0 to meet threshold of 1e-06
+Program complete
+
+
+Error Test: TotalChars character
+Traceback (most recent call last):
+  File "/home/daniel/Documents/gitProjects/Calculate-Palindrome-Length/CalculatePalindromeLength.py", line 222, in <module>
+    wordLen, prob = app.runCalculations(int(options.totalChars))
+ValueError: invalid literal for int() with base 10: 'a'
+
+
+Error Test: TotalChars string
+Traceback (most recent call last):
+  File "/home/daniel/Documents/gitProjects/Calculate-Palindrome-Length/CalculatePalindromeLength.py", line 222, in <module>
+    wordLen, prob = app.runCalculations(int(options.totalChars))
+ValueError: invalid literal for int() with base 10: 'foo'
+
+
+Error Test: TotalChars blank
+usage: CalculatePalindromeLength.py [-h] -tc TOTALCHARS [-th THRESHOLD] [-mr MAXRUNS] [-s]
+CalculatePalindromeLength.py: error: argument -tc: expected one argument
+
+
+===== Threshold error tests =====
+
+Error Test: Threshold zero
+Entered threshold was not a value exclusively between 0-1 or equal to -1, setting to default: 0.000001
+Word Length: 11 With final probability of 8.416533573215762e-08 to meet threshold of 0
+Program complete
+
+
+Error Test: Threshold -5
+Entered threshold was not a value exclusively between 0-1 or equal to -1, setting to default: 0.000001
+Word Length: 11 With final probability of 8.416533573215762e-08 to meet threshold of -5
+Program complete
+
+
+Error Test: Threshold character
+Traceback (most recent call last):
+  File "/home/daniel/Documents/gitProjects/Calculate-Palindrome-Length/CalculatePalindromeLength.py", line 220, in <module>
+    app = calcProbPal(options.threshold, options.maxRuns, options.show)
+  File "/home/daniel/Documents/gitProjects/Calculate-Palindrome-Length/CalculatePalindromeLength.py", line 116, in __init__
+    if(not ((threshold < 1 and threshold > 0) or threshold == -1)):
+TypeError: '<' not supported between instances of 'str' and 'int'
+
+
+Error Test: Threshold string
+Traceback (most recent call last):
+  File "/home/daniel/Documents/gitProjects/Calculate-Palindrome-Length/CalculatePalindromeLength.py", line 220, in <module>
+    app = calcProbPal(options.threshold, options.maxRuns, options.show)
+  File "/home/daniel/Documents/gitProjects/Calculate-Palindrome-Length/CalculatePalindromeLength.py", line 116, in __init__
+    if(not ((threshold < 1 and threshold > 0) or threshold == -1)):
+TypeError: '<' not supported between instances of 'str' and 'int'
+
+
+Error Test: Threshold blank
+usage: CalculatePalindromeLength.py [-h] -tc TOTALCHARS [-th THRESHOLD] [-mr MAXRUNS] [-s]
+CalculatePalindromeLength.py: error: argument -th: expected one argument
+
+
+===== MaxRuns error tests =====
+
+Error Test: MaxRuns zero
+Word Length: 0 With final probability of 99 to meet threshold of 1e-06
+Program complete
+
+
+Error Test: MaxRuns -5
+Word Length: 0   Probability: 99.00000000000000000000
+Word Length: 0 With final probability of 99 to meet threshold of 1e-06
+Program complete
+
+
+Error Test: MaxRuns character
+Traceback (most recent call last):
+  File "/home/daniel/Documents/gitProjects/Calculate-Palindrome-Length/CalculatePalindromeLength.py", line 222, in <module>
+    wordLen, prob = app.runCalculations(int(options.totalChars))
+  File "/home/daniel/Documents/gitProjects/Calculate-Palindrome-Length/CalculatePalindromeLength.py", line 133, in runCalculations
+    while((wordLength < self.maxCalcRuns or self.maxCalcRuns == -1) and (curProb > self.threshold or self.threshold == -1)):
+TypeError: '<' not supported between instances of 'int' and 'str'
+
+
+Error Test: MaxRuns string
+Traceback (most recent call last):
+  File "/home/daniel/Documents/gitProjects/Calculate-Palindrome-Length/CalculatePalindromeLength.py", line 222, in <module>
+    wordLen, prob = app.runCalculations(int(options.totalChars))
+  File "/home/daniel/Documents/gitProjects/Calculate-Palindrome-Length/CalculatePalindromeLength.py", line 133, in runCalculations
+    while((wordLength < self.maxCalcRuns or self.maxCalcRuns == -1) and (curProb > self.threshold or self.threshold == -1)):
+TypeError: '<' not supported between instances of 'int' and 'str'
+
+
+Error Test: MaxRuns blank
+usage: CalculatePalindromeLength.py [-h] -tc TOTALCHARS [-th THRESHOLD] [-mr MAXRUNS] [-s]
+CalculatePalindromeLength.py: error: argument -mr: expected one argument
